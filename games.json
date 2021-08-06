@@ -1,0 +1,22 @@
+[
+    {
+      "activity": "May the force be with you",
+      "status": "online"
+    },
+    {
+      "activity": "May the Odds be ever in your favor",
+      "status": "online"
+    },
+    {
+      "activity": "Thinking",
+      "status": "idle"
+    },
+    {
+      "activity": "Jumping",
+      "status": "busy"
+    },
+    {
+      "activity": "Running",
+      "status": "online"
+    }
+  ]
