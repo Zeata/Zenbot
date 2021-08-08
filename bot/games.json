@@ -9,11 +9,11 @@
     },
     {
       "activity": "Thinking",
-      "status": "idle"
+      "status": "online"
     },
     {
       "activity": "Jumping",
-      "status": "busy"
+      "status": "online"
     },
     {
       "activity": "Running",
