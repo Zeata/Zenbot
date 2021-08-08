@@ -16,7 +16,7 @@ logger.addHandler(handler)
 #intents.members = True
 
 def get_prefix(client, message):
-    with open('/bot/prefixes.json', 'r') as f:
+    with open('bot/prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
     return prefixes[str(message.guild.id)]
@@ -35,15 +35,15 @@ async def on_ready():
         print('Name: ',guild.name)
         print('ID: ', guild.id)
         print(' ')
-        with open('/bot/prefixes.json', 'r') as f:
+        with open('bot/prefixes.json', 'r') as f:
                 prefixes = json.load(f)
         if guild.id not in prefixes:
             prefixes[str(guild.id)] = 'zb!'
                 
-            with open('/bot/prefixes.json', 'w') as f:
+            with open('bot/prefixes.json', 'w') as f:
                 json.dump(prefixes, f, indent=4)
 #-----------------------------------------------
-    input_file = open ('/bot/games.json')
+    input_file = open ('bot/games.json')
     json_array = json.load(input_file)
     discordActivity = []
     range = 0
@@ -64,32 +64,32 @@ async def on_ready():
 
 @client.event
 async def on_guild_join(guild):
-    with open('/bot/prefixes.json', 'r') as f:
+    with open('bot/prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
     prefixes[str(guild.id)] = 'zb!'
 
-    with open('/bot/prefixes.json', 'w') as f:
+    with open('bot/prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
 @client.event
 async def on_guild_remove(guild):
-    with open('/bot/prefixes.json', 'r') as f:
+    with open('bot/prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
     prefixes.pop(str(guild.id))
 
-    with open('/bot/prefixes.json', 'w') as f:
+    with open('bot/prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
 @client.command()
 async def changeprefix(ctx, prefix):
-    with open('/bot/prefixes.json', 'r') as f:
+    with open('bot/prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
     prefixes[str(ctx.guild.id)] = prefix
 
-    with open('/bot/prefixes.json', 'w') as f:
+    with open('bot/prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
     await ctx.send(f'Prefix Changed to: {prefix}')
