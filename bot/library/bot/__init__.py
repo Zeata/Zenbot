@@ -1,6 +1,5 @@
 
 from asyncio.tasks import sleep
-from sys import stdout
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Embed
 from discord.ext.commands import Bot as BotBase
@@ -8,8 +7,10 @@ from discord.ext.commands.core import Command
 from discord.ext.commands.errors import CommandNotFound
 from discord.ext.commands import (CommandNotFound, BadArgument, MissingRequiredArgument,
 								  CommandOnCooldown)
+from discord.ext.commands import when_mentioned_or
 from discord.errors import HTTPException, Forbidden
 from discord.flags import Intents
+
 from ..db import db
 from glob import glob
 
@@ -19,6 +20,9 @@ import os
 PREFIX = "!zb"
 OWNER_IDS = [163890141834772480]
 COGS = [path.split("\\")[-1][:-3] for path in glob("./bot/library/cogs/*.py")]
+
+def get_prefix(bot, message):
+    return when_mentioned_or(PREFIX)(bot, message)
 
 class Ready(object):
     def __init__(self):
@@ -44,7 +48,7 @@ class Bot(BotBase):
         db.autosave(self.scheduler)
 
         super().__init__(
-            command_prefix = PREFIX, 
+            command_prefix = get_prefix, 
             owner_ids = OWNER_IDS,
             intents = Intents.all(),
         )
