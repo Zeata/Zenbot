@@ -1,14 +1,19 @@
 
 from asyncio.tasks import sleep
+from sys import stdout
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Embed
 from discord.ext.commands import Bot as BotBase
+from discord.ext.commands.core import Command
 from discord.ext.commands.errors import CommandNotFound
+from discord.ext.commands import (CommandNotFound, BadArgument, MissingRequiredArgument,
+								  CommandOnCooldown)
+from discord.errors import HTTPException, Forbidden
 from discord.flags import Intents
 from ..db import db
 from glob import glob
 
-import datetime
+from datetime import datetime
 import os
 
 PREFIX = "!zb"
@@ -85,8 +90,21 @@ class Bot(BotBase):
         if isinstance(exc, CommandNotFound):
             pass
 
+        elif isinstance(exc, MissingRequiredArgument):
+            await ctx.send("One or more required arguments are missing.")
+
+        elif isinstance(exc, CommandOnCooldown):
+            await ctx.send(f"That command is on {str(exc.cooldown.type).split('.')[-1]} cooldown. Try again in {exc.retry_after:,.2f} secs.")
+
         elif hasattr(exc, "original"):
-            raise exc.original
+            # if isinstance(exc.original, HTTPException):
+            # 	await ctx.send("Unable to send message.")
+
+            if isinstance(exc.original, Forbidden):
+                await ctx.send("I do not have permission to do that.")
+
+            else:
+                raise exc.original
 
         else:
             raise exc
@@ -107,7 +125,7 @@ class Bot(BotBase):
             #     embed.add_field(name=name, value=value, inline=inline)
             # embed.set_author(name='{0.user}'.format(self), icon_url=self.guild.icon_url)
             # embed.set_footer(text="This is a footer")
-            # await channel.send(embed=embed)
+            # await self.stdout.send(embed=embed)
 
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
@@ -119,6 +137,8 @@ class Bot(BotBase):
             print("Bot Reconnect")
 
     async def on_message(self, message):
-        pass
+        if not message.author.bot:
+            await self.process_commands(message)
+
 
 bot = Bot()
