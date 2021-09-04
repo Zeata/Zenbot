@@ -9,3 +9,9 @@ CREATE TABLE IF NOT EXISTS guilds (
 	GuildID integer PRIMARY KEY,
 	Prefix text DEFAULT "!zb"
 );
+
+CREATE TABLE IF NOT EXISTS quotes (
+    QuouteID INTEGER PRIMARY KEY,
+    Quote text,
+    Author text
+)
